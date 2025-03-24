@@ -279,6 +279,26 @@ def format_time(seconds):
     milliseconds = td.microseconds // 1000
     return f"{hours:02}:{minutes:02}:{seconds:02},{milliseconds:03}"
 
+def extract_plain_text(transcription_data):
+    """Extract plain text without timestamps from ElevenLabs transcription data"""
+    text_parts = []
+    
+    # Extract all words from the transcription
+    words = [w for w in transcription_data.get('words', []) if w.get('type') == 'word']
+    
+    # Create text content from the words with spaces between them
+    for j, word in enumerate(words):
+        word_text = word.get('text', '')
+        
+        # Check if this is a spacing type or if we need to add a space
+        if j > 0 and not word_text.startswith((' ', '.', ',', '!', '?', ':', ';')):
+            # Add space before this word if it doesn't start with punctuation
+            text_parts.append(' ')
+        
+        text_parts.append(word_text)
+        
+    return "".join(text_parts).strip()
+
 def create_srt_content(transcription_data):
     """Create SRT file content from ElevenLabs transcription data"""
     srt_content = ""
@@ -392,24 +412,36 @@ def transcribe(download_id):
             # Create SRT file content
             srt_content = create_srt_content(transcription_data)
             
+            # Extract plain text without timestamps
+            plain_text = extract_plain_text(transcription_data)
+            
             # Save SRT file
             title = result.get('title', 'transcription')
             srt_file_path = f"{TEMP_DIR}/{download_id}/{clean_filename(title)}.srt"
             
             with open(srt_file_path, 'w', encoding='utf-8') as srt_file:
                 srt_file.write(srt_content)
+                
+            # Save TXT file
+            txt_file_path = f"{TEMP_DIR}/{download_id}/{clean_filename(title)}.txt"
+            
+            with open(txt_file_path, 'w', encoding='utf-8') as txt_file:
+                txt_file.write(plain_text)
             
             logger.debug(f"Created SRT file at: {srt_file_path}")
+            logger.debug(f"Created TXT file at: {txt_file_path}")
             
-            # Update download results to include transcription file
+            # Update download results to include transcription files
             download_results[download_id]['srt_file'] = srt_file_path
+            download_results[download_id]['txt_file'] = txt_file_path
             download_results[download_id]['transcription_data'] = transcription_data
             
             # Return success response with transcription data
             return jsonify({
                 'status': 'success',
-                'text': transcription_data.get('text', ''),
+                'text': plain_text,
                 'srt_preview': srt_content,
+                'plain_text': plain_text,
                 'language': transcription_data.get('language_code', 'en')
             })
         else:
@@ -464,4 +496,33 @@ def get_srt(download_id):
         as_attachment=True,
         download_name=f"{clean_filename(title)}.srt",
         mimetype="text/srt"
+    )
+
+@app.route('/get_txt/<download_id>')
+def get_txt(download_id):
+    """Send the transcription TXT file to the user"""
+    if download_id not in download_results:
+        return jsonify({
+            'status': 'error',
+            'message': 'Transcription not found'
+        }), 404
+    
+    result = download_results[download_id]
+    
+    if 'txt_file' not in result:
+        return jsonify({
+            'status': 'error',
+            'message': 'TXT file not available'
+        }), 400
+    
+    # Get the file path
+    file_path = result['txt_file']
+    title = result.get('title', 'transcription')
+    
+    # Send the file
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name=f"{clean_filename(title)}.txt",
+        mimetype="text/plain"
     )

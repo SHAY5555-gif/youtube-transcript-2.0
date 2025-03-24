@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const transcriptionStatusText = document.getElementById('transcription-status-text');
     const transcriptionPreview = document.getElementById('transcription-preview');
     const downloadSrtButton = document.getElementById('download-srt-button');
+    const downloadTxtButton = document.getElementById('download-txt-button');
+    const saveApiKeyButton = document.getElementById('save-api-key');
 
     // Current download ID
     let currentDownloadId = null;
@@ -230,6 +232,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Add function to save API key
+    if (saveApiKeyButton) {
+        saveApiKeyButton.addEventListener('click', function() {
+            const apiKey = elevenlabsApiKey.value.trim();
+            
+            if (!apiKey) {
+                alert('Please enter an API key to save');
+                return;
+            }
+            
+            // Save the API key to localStorage
+            localStorage.setItem('elevenlabs_api_key', apiKey);
+            
+            // Show confirmation message
+            alert('Your API key has been saved to browser storage.');
+        });
+    }
+    
     // Add function to clear API key
     const clearApiKeyButton = document.getElementById('clear-api-key');
     if (clearApiKeyButton) {
@@ -290,12 +310,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.status === 'success') {
                     // Show results modal
-                    transcriptionPreview.textContent = data.srt_preview || data.text || 'Transcription completed successfully';
+                    transcriptionPreview.textContent = data.plain_text || data.text || 'Transcription completed successfully';
                     transcriptionResultsModal.show();
                     
-                    // Set up download button
+                    // Set up download buttons
                     downloadSrtButton.onclick = function() {
                         window.location.href = `/get_srt/${currentDownloadId}`;
+                    };
+                    
+                    downloadTxtButton.onclick = function() {
+                        window.location.href = `/get_txt/${currentDownloadId}`;
                     };
                 } else {
                     alert(`Transcription failed: ${data.message || 'Unknown error'}`);

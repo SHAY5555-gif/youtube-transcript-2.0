@@ -87,6 +87,9 @@
                                                             <label for="elevenlabs-api-key" class="form-label">ElevenLabs API Key:</label>
                                                             <div class="input-group">
                                                                 <input type="password" class="form-control" id="elevenlabs-api-key" placeholder="Enter your ElevenLabs API Key">
+                                                                <button class="btn btn-outline-primary" type="button" id="save-api-key" title="Save API key">
+                                                                    <i class="fa fa-save"></i>
+                                                                </button>
                                                                 <button class="btn btn-outline-secondary" type="button" id="clear-api-key" title="Clear saved API key">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
@@ -135,6 +138,9 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary" id="download-txt-button">
+                                                            <i class="fa fa-file-text me-2"></i>Download TXT
+                                                        </button>
                                                         <button type="button" class="btn btn-success" id="download-srt-button">
                                                             <i class="fa fa-download me-2"></i>Download SRT
                                                         </button>
