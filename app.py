@@ -5,6 +5,7 @@ import logging
 import urllib.parse
 import requests
 import json
+import unicodedata
 from flask import Flask, render_template, request, jsonify, send_file, session, Response
 import yt_dlp
 import threading
@@ -44,7 +45,18 @@ def clean_filename(filename):
     # Remove invalid characters
     filename = re.sub(r'[\\/*?:"<>|]', "", filename)
     # Limit length
-    return filename[:100]
+    filename = filename[:100]
+    # Transliterate non-ASCII characters to ASCII equivalents where possible
+    # For languages like Hebrew or Chinese that have no ASCII equivalent, this will remove them
+    try:
+        safe_filename = unicodedata.normalize('NFKD', filename).encode('ascii', 'ignore').decode('ascii')
+        # If transliteration removed everything or almost everything, use original with a prefix
+        if len(safe_filename.strip()) < len(filename) * 0.3:
+            return "download_" + str(int(time.time()))
+        return safe_filename
+    except:
+        # If any error occurs, use a default filename
+        return "download_" + str(int(time.time()))
 
 def download_progress_hook(d):
     """Callback function to track download progress"""
@@ -281,23 +293,33 @@ def format_time(seconds):
 
 def extract_plain_text(transcription_data):
     """Extract plain text without timestamps from ElevenLabs transcription data"""
-    text_parts = []
-    
     # Extract all words from the transcription
     words = [w for w in transcription_data.get('words', []) if w.get('type') == 'word']
     
-    # Create text content from the words with spaces between them
-    for j, word in enumerate(words):
-        word_text = word.get('text', '')
-        
-        # Check if this is a spacing type or if we need to add a space
-        if j > 0 and not word_text.startswith((' ', '.', ',', '!', '?', ':', ';')):
-            # Add space before this word if it doesn't start with punctuation
-            text_parts.append(' ')
-        
-        text_parts.append(word_text)
-        
-    return "".join(text_parts).strip()
+    # Group words into paragraphs (10 words per paragraph)
+    paragraphs = []
+    
+    for i in range(0, len(words), 10):
+        group = words[i:i+10]
+        if not group:
+            continue
+            
+        # Create text content from the words with spaces between them
+        text_parts = []
+        for j, word in enumerate(group):
+            word_text = word.get('text', '')
+            
+            # Check if this is a spacing type or if we need to add a space
+            if j > 0 and not word_text.startswith((' ', '.', ',', '!', '?', ':', ';')):
+                # Add space before this word if it doesn't start with punctuation
+                text_parts.append(' ')
+            
+            text_parts.append(word_text)
+            
+        paragraphs.append("".join(text_parts).strip())
+    
+    # Join paragraphs with line breaks
+    return "\n\n".join(paragraphs)
 
 def create_srt_content(transcription_data):
     """Create SRT file content from ElevenLabs transcription data"""
