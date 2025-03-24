@@ -85,8 +85,13 @@
                                                     <div class="modal-body">
                                                         <div class="mb-3">
                                                             <label for="elevenlabs-api-key" class="form-label">ElevenLabs API Key:</label>
-                                                            <input type="password" class="form-control" id="elevenlabs-api-key" placeholder="Enter your ElevenLabs API Key">
-                                                            <div class="form-text">Your API key will be used only for this transaction and won't be stored on the server.</div>
+                                                            <div class="input-group">
+                                                                <input type="password" class="form-control" id="elevenlabs-api-key" placeholder="Enter your ElevenLabs API Key">
+                                                                <button class="btn btn-outline-secondary" type="button" id="clear-api-key" title="Clear saved API key">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="form-text">Your API key will be saved locally in your browser for convenience and won't be stored on the server.</div>
                                                         </div>
                                                         <div id="transcription-options" class="mb-3">
                                                             <label class="form-label">Transcription Options:</label>

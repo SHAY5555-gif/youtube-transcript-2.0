@@ -222,6 +222,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Initialize API key input from localStorage if available
+    if (elevenlabsApiKey) {
+        const savedApiKey = localStorage.getItem('elevenlabs_api_key');
+        if (savedApiKey) {
+            elevenlabsApiKey.value = savedApiKey;
+        }
+    }
+    
+    // Add function to clear API key
+    const clearApiKeyButton = document.getElementById('clear-api-key');
+    if (clearApiKeyButton) {
+        clearApiKeyButton.addEventListener('click', function() {
+            // Clear the input field
+            if (elevenlabsApiKey) {
+                elevenlabsApiKey.value = '';
+            }
+            
+            // Remove the key from localStorage
+            localStorage.removeItem('elevenlabs_api_key');
+            
+            // Show confirmation message
+            alert('Your API key has been removed from browser storage.');
+        });
+    }
+    
     // Transcription functionality
     if (transcribeButton) {
         transcribeButton.addEventListener('click', function() {
@@ -237,6 +262,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Please enter your ElevenLabs API key');
                 return;
             }
+            
+            // Save API key to localStorage
+            localStorage.setItem('elevenlabs_api_key', apiKey);
             
             // Show status
             transcriptionStatus.classList.remove('d-none');
