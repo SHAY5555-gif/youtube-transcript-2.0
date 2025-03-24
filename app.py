@@ -348,22 +348,27 @@ def transcribe(download_id):
         url = "https://api.elevenlabs.io/v1/speech-to-text"
         
         headers = {
-            "xi-api-key": api_key
+            "xi-api-key": api_key,
+            # Не устанавливаем Content-Type, requests поставит его автоматически с boundary
         }
         
-        files = {
-            'file': open(file_path, 'rb')
-        }
-        
-        data = {
-            'model_id': 'scribe_v1',
-            'diarize': diarize,
-            'tag_audio_events': tag_events,
-            'timestamps_granularity': 'word'
-        }
-        
-        # Make the API request
-        response = requests.post(url, headers=headers, files=files, data=data)
+        # Открываем файл в двоичном режиме
+        with open(file_path, 'rb') as audio_file:
+            files = {
+                'file': ('audio.mp3', audio_file, 'audio/mpeg')
+            }
+            
+            data = {
+                'model_id': 'scribe_v1',
+                'diarize': str(diarize).lower(),  # Конвертируем в 'true' или 'false'
+                'tag_audio_events': str(tag_events).lower(),
+                'timestamps_granularity': 'word'
+            }
+            
+            logger.debug(f"Sending ElevenLabs API request with params: {data}")
+            
+            # Make the API request
+            response = requests.post(url, headers=headers, files=files, data=data)
         
         # Check if the request was successful
         if response.status_code == 200:

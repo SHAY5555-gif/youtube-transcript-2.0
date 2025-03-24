@@ -1,0 +1,368 @@
+1
+00:00:00,280 --> 00:00:02,159
+[speaker_0] SoIwantyoutoimagineforamomentthat
+
+2
+00:00:02,220 --> 00:00:05,319
+[speaker_0] youareacatalogmanager,forexample,forane-commerce
+
+3
+00:00:05,380 --> 00:00:08,539
+[speaker_0] company,andmaybeyouhaveasingularimageofa
+
+4
+00:00:08,679 --> 00:00:11,719
+[speaker_0] modelwearingapieceofclothing.Butyoudon'thave
+
+5
+00:00:11,779 --> 00:00:14,539
+[speaker_0] otheranglesofthatimageandyouwannauseAI
+
+6
+00:00:14,639 --> 00:00:18,079
+[speaker_0] togeneratethoseimages.Well,checkthisout.Asyou
+
+7
+00:00:18,119 --> 00:00:20,279
+[speaker_0] cansee,Iwannacreateasideviewofthis
+
+8
+00:00:20,359 --> 00:00:23,959
+[speaker_0] originalphotothatIhave.Boom,Ihaveaside
+
+9
+00:00:24,019 --> 00:00:27,539
+[speaker_0] viewshotofthatpieceofclothing.Next,howabout
+
+10
+00:00:27,699 --> 00:00:31,979
+[speaker_0] createarearviewofthisphoto?Boom,rearview
+
+11
+00:00:32,000 --> 00:00:37,000
+[speaker_0] ofphoto.Pieceofcake.Checkitout.Thisis
+
+12
+00:00:37,759 --> 00:00:42,680
+[speaker_1] RossyBytes.SowhatIwannatalkabouttodayis
+
+13
+00:00:42,700 --> 00:00:47,559
+[speaker_0] intheGoogleAIStudio,theGemini2Flashexperimental
+
+14
+00:00:47,639 --> 00:00:50,379
+[speaker_0] model.SowhenyoucomeintotheAIStudio,and
+
+15
+00:00:50,419 --> 00:00:53,119
+[speaker_0] I'llincludethelinkinthedescriptionbelow,you'regonna
+
+16
+00:00:53,159 --> 00:00:58,159
+[speaker_0] wannacomeunderneathPreviewandselectGemini2.0Flashexperimental.
+
+17
+00:00:58,180 --> 00:01:01,219
+[speaker_0] Andthenforoutputformat,youwannaselectimagesand
+
+18
+00:01:01,319 --> 00:01:03,619
+[speaker_0] text.Solet'stryoutafewdifferentexamplesof
+
+19
+00:01:03,619 --> 00:01:05,719
+[speaker_0] thingsthatwecandowiththis.Sotostart,
+
+20
+00:01:05,779 --> 00:01:08,159
+[speaker_0] I'mgonnabringoveranimagethatIalreadyhave
+
+21
+00:01:08,199 --> 00:01:10,799
+[speaker_0] ofamodelwearingadress,andI'mgonnasay
+
+22
+00:01:11,459 --> 00:01:15,419
+[speaker_0] createasideviewofthisphoto.We'lljustclick
+
+23
+00:01:15,499 --> 00:01:19,039
+[speaker_0] Run.Youcanseehowlongit'stakingforthe
+
+24
+00:01:19,199 --> 00:01:23,239
+[speaker_0] Geminitoactuallyprocessthis.So4.8secondsandit
+
+25
+00:01:23,279 --> 00:01:28,959
+[speaker_0] generatedaprettyperfectsideviewofthatparticularclothing.
+
+26
+00:01:31,319 --> 00:01:35,339
+[speaker_0] Sonowlet'sdocreatearearviewofthe
+
+27
+00:01:35,439 --> 00:01:46,139
+[speaker_0] sameimage.GoaheadandclickRun.Again,fiveseconds
+
+28
+00:01:46,179 --> 00:01:49,219
+[speaker_0] orso,andwehaveaperfectrearimage.If
+
+29
+00:01:49,259 --> 00:01:52,139
+[speaker_0] weopenitup,itlookslikethesamemodel,
+
+30
+00:01:52,179 --> 00:01:55,319
+[speaker_0] sameclothing.Okay,sonextI'mgonnadragovera
+
+31
+00:01:55,479 --> 00:01:57,859
+[speaker_0] malemodelwearingasuitandI'mgoingtodo
+
+32
+00:01:57,899 --> 00:02:00,559
+[speaker_0] thesametest.I'mgoingtosaycreateaside
+
+33
+00:02:00,619 --> 00:02:09,539
+[speaker_0] viewofthisphoto,andwe'llclickRun.Thisone's
+
+34
+00:02:09,559 --> 00:02:11,799
+[speaker_0] takingalittlelonger,butboom,lookatthat.We
+
+35
+00:02:11,879 --> 00:02:14,439
+[speaker_0] haveasideviewshotofthatguywearingthe
+
+36
+00:02:14,539 --> 00:02:19,239
+[speaker_0] suit.Sojustlikewedidwiththemodel,I'll
+
+37
+00:02:19,319 --> 00:02:23,599
+[speaker_0] alsocomeinandsaycreatearearviewof
+
+38
+00:02:23,759 --> 00:02:31,479
+[speaker_0] thesamephotoandclickRun.Andtherewehave
+
+39
+00:02:31,579 --> 00:02:36,679
+[speaker_0] arearviewofthemodelwearingthatsuit.Okay,
+
+40
+00:02:36,739 --> 00:02:39,019
+[speaker_0] nextIhavethisimageofpeopleplayingina
+
+41
+00:02:39,119 --> 00:02:42,059
+[speaker_0] yardonapatioatahouse,andwhatI
+
+42
+00:02:42,119 --> 00:02:44,799
+[speaker_0] wannadoisIwanttousethisimageand
+
+43
+00:02:44,999 --> 00:02:47,939
+[speaker_0] Iwanttotrytoremovethepeopleoutof
+
+44
+00:02:47,979 --> 00:02:51,819
+[speaker_0] thebackground.SoI'mgonnasayremovethepeoplefrom
+
+45
+00:02:51,919 --> 00:02:59,819
+[speaker_0] thisphoto,andclickRun.Andwithinaboutnineseconds,
+
+46
+00:03:00,399 --> 00:03:02,079
+[speaker_0] takealookatthat.Allthepeoplearegone
+
+47
+00:03:02,139 --> 00:03:06,619
+[speaker_0] fromthephoto.Generatearecipewithstepsandimages
+
+48
+00:03:06,679 --> 00:03:08,719
+[speaker_0] witheachstepofthewayonhowtomake
+
+49
+00:03:08,799 --> 00:03:16,199
+[speaker_0] Frenchtoast.Aswecansee,wehaveingredientsand
+
+50
+00:03:16,319 --> 00:03:21,979
+[speaker_0] equipment.Crackthelargeeggs,addthemilk,whiskthe
+
+51
+00:03:22,019 --> 00:03:31,739
+[speaker_0] ingredientsthoroughly,soakthebread.It'sshowingyoutheskillet
+
+52
+00:03:31,759 --> 00:03:36,739
+[speaker_0] withbutter,cookingtheFrenchtoast.Thatisinsane.Then
+
+53
+00:03:36,859 --> 00:03:40,439
+[speaker_0] flippingitover.Repeatandaddmorebutter.Thereyou
+
+54
+00:03:40,519 --> 00:03:42,959
+[speaker_0] haveyourfinishedFrenchtoast,andthenyoucanadd
+
+55
+00:03:43,039 --> 00:03:49,859
+[speaker_0] sometoppings.ForthisoneIwannasaygeneratean
+
+56
+00:03:49,999 --> 00:03:59,419
+[speaker_0] intricatemandalacoloringpageinblackandwhite.Sokind
+
+57
+00:03:59,459 --> 00:04:04,399
+[speaker_0] oflikejustacoloringpageinacoloringbook.
+
+58
+00:04:06,639 --> 00:04:08,759
+[speaker_0] Sothattookabout15seconds,butasyoucan
+
+59
+00:04:08,879 --> 00:04:13,999
+[speaker_0] see,wehaveaveryintricatemandaladrawingpicture.So
+
+60
+00:04:14,059 --> 00:04:18,239
+[speaker_0] nowI'mgoingtosaynowcolorthisimagein
+
+61
+00:04:18,799 --> 00:04:27,639
+[speaker_0] withvibrantandbeautifulcolors.ClickRun.Sothattook
+
+62
+00:04:27,699 --> 00:04:30,499
+[speaker_0] about20seconds,butaswecansee,wehave
+
+63
+00:04:30,559 --> 00:04:35,459
+[speaker_0] acolored-inversionofourmandalacoloringpage.Sonext
+
+64
+00:04:35,539 --> 00:04:37,999
+[speaker_0] IwannaseehowGeminidoescreatinganimage.So
+
+65
+00:04:38,039 --> 00:04:41,819
+[speaker_0] I'mbasicallyaskingwithaverydetailedprompttocreate
+
+66
+00:04:41,859 --> 00:04:45,099
+[speaker_0] ablackandwhitephotographofanelderlycouplewalking
+
+67
+00:04:45,159 --> 00:04:47,759
+[speaker_0] handinhandinapark,andasyoucan
+
+68
+00:04:47,919 --> 00:04:54,779
+[speaker_0] see,itcreatedafantastic-lookingimage.SonowIwanna
+
+69
+00:04:54,819 --> 00:04:56,939
+[speaker_0] haveitcolorthispicturein,soI'mgonnasay
+
+70
+00:04:57,059 --> 00:05:02,559
+[speaker_0] colorizethisimagenow.Andwithin5.2seconds,lookat
+
+71
+00:05:02,599 --> 00:05:06,879
+[speaker_0] that.Wehaveafull-colorversionofthesamephoto.
+
+72
+00:05:10,599 --> 00:05:12,939
+[speaker_0] NextI'mgonnasayaddasmalldogsomewhereon
+
+73
+00:05:12,979 --> 00:05:18,019
+[speaker_0] thesidewalk.Andlookatthat.Notonlyisit
+
+74
+00:05:18,039 --> 00:05:22,919
+[speaker_0] onthesidewalk,butthecouple'sactuallywalkingit.Okay,
+
+75
+00:05:22,999 --> 00:05:25,019
+[speaker_0] sonextIhaveanimageofasofaand
+
+76
+00:05:25,079 --> 00:05:27,239
+[speaker_0] Iwannatrytochangethecolorofthesofa
+
+77
+00:05:27,359 --> 00:05:29,659
+[speaker_0] sowecouldmaybehavemultiplevariationsofit.So
+
+78
+00:05:29,679 --> 00:05:33,739
+[speaker_0] I'mgonnasaymakethissofabluecolored,andthen
+
+79
+00:05:33,759 --> 00:05:38,439
+[speaker_0] I'mgonnaclickRun.Inaboutfiveseconds,lookat
+
+80
+00:05:38,459 --> 00:05:44,939
+[speaker_0] that.Wehaveablueversionofoursofa.So
+
+81
+00:05:44,999 --> 00:05:54,459
+[speaker_0] nextI'mgonnasaynowmakeitburntorange.And
+
+82
+00:05:54,499 --> 00:05:59,199
+[speaker_0] there'saburntorangeversionofoursofa.I'mgoing
+
+83
+00:05:59,239 --> 00:06:04,599
+[speaker_0] tonowsayaddastylisticclockonthewall
+
+84
+00:06:04,739 --> 00:06:12,099
+[speaker_0] inthebackground.That'scrazy.Sonowwehaveour
+
+85
+00:06:12,219 --> 00:06:15,279
+[speaker_0] stylisticclockonthewallinthebackground.Soas
+
+86
+00:06:15,319 --> 00:06:18,879
+[speaker_0] youcansee,thistechnologyisabsolutelyamazing,andthe
+
+87
+00:06:18,919 --> 00:06:21,879
+[speaker_0] reallycrazythingaboutitiswhatI'veshownyou
+
+88
+00:06:21,899 --> 00:06:24,379
+[speaker_0] hereistheworstit'lleverbe.It'sonlygoing
+
+89
+00:06:24,399 --> 00:06:26,779
+[speaker_0] togetexponentiallybetter.Letmeknowwhatyouthink
+
+90
+00:06:26,799 --> 00:06:28,539
+[speaker_0] ofthisinthecomments,andifyou'dlikeme
+
+91
+00:06:28,579 --> 00:06:31,659
+[speaker_0] tocontinueproducingcontentlikethis,pleaseclickLikeand
+
+92
+00:06:31,739 --> 00:06:34,059
+[speaker_0] Subscribe.Thankyouandhaveagreatday.
+
