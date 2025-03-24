@@ -202,6 +202,9 @@ document.addEventListener('DOMContentLoaded', function() {
         downloadButton.disabled = false;
         downloadButton.innerHTML = '<i class="fa fa-download me-2"></i>Download Audio';
         
+        // Clear the YouTube URL input field
+        youtubeUrlInput.value = '';
+        
         // Clean up if there was a download
         if (currentDownloadId) {
             cleanupDownload(currentDownloadId);
