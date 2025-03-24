@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tryAgainButton = document.getElementById('try-again-button');
     const instructionsCard = document.getElementById('instructions-card');
     const downloadTitle = document.getElementById('download-title');
+    const downloadNewButton = document.getElementById('download-new-button');
     
     // Transcription elements
     const transcribeButton = document.getElementById('transcribe-button');
@@ -55,6 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
     tryAgainButton.addEventListener('click', function() {
         resetUI();
     });
+    
+    // Download new file button handler
+    if (downloadNewButton) {
+        downloadNewButton.addEventListener('click', function() {
+            resetUI();
+        });
+    }
 
     // Function to check if a URL is a valid YouTube URL
     function isValidYoutubeUrl(url) {
