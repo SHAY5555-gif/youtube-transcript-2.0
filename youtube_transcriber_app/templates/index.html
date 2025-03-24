@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Transcriber</title>
+    <!-- Replit-themed Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h1 class="my-3">
+                            <i class="fab fa-youtube me-2"></i>YouTube Video Transcriber
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        <form id="download-form" class="mb-4">
+                            <div class="mb-3">
+                                <label for="youtube-url" class="form-label">Enter YouTube URL:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-link"></i>
+                                    </span>
+                                    <input type="url" id="youtube-url" name="youtube-url" class="form-control" 
+                                           placeholder="https://www.youtube.com/watch?v=..." required>
+                                    <button type="submit" class="btn btn-primary" id="download-button">
+                                        <i class="fa fa-download me-2"></i>Download Audio
+                                    </button>
+                                </div>
+                                <div class="form-text">Enter a valid YouTube video or playlist URL</div>
+                            </div>
+                        </form>
+
+                        <!-- Progress section (initially hidden) -->
+                        <div id="progress-section" class="d-none">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">Download Progress</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="status-message" class="alert alert-info mb-3">
+                                        <i class="fa fa-info-circle me-2"></i>
+                                        <span id="status-text">Processing your request...</span>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Progress:</span>
+                                            <span id="progress-percentage">0%</span>
+                                        </div>
+                                        <div class="progress" style="height: 25px;">
+                                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                                 role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="download-complete-section" class="text-center d-none">
+                                        <h4 id="download-title" class="mb-3">Download Ready</h4>
+                                        <div class="btn-group mb-3">
+                                            <button id="download-file-button" class="btn btn-success btn-lg">
+                                                <i class="fa fa-download me-2"></i>Download MP3
+                                            </button>
+                                            <button id="transcribe-button" class="btn btn-info btn-lg">
+                                                <i class="fa fa-file-text me-2"></i>Transcribe
+                                            </button>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button id="download-new-button" class="btn btn-primary">
+                                                <i class="fa fa-plus-circle me-2"></i>Download New File
+                                            </button>
+                                        </div>
+                                        <p class="mt-2 text-muted">Click the button above to download your audio file, or click "Download New File" to start over with a new video</p>
+                                        
+                                        <!-- Transcription Modal -->
+                                        <div class="modal fade" id="transcribeModal" tabindex="-1" aria-labelledby="transcribeModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="transcribeModalLabel">Transcribe Audio</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="elevenlabs-api-key" class="form-label">ElevenLabs API Key:</label>
+                                                            <div class="input-group">
+                                                                <input type="password" class="form-control" id="elevenlabs-api-key" placeholder="Enter your ElevenLabs API Key">
+                                                                <button class="btn btn-outline-primary" type="button" id="save-api-key" title="Save API key">
+                                                                    <i class="fa fa-save"></i>
+                                                                </button>
+                                                                <button class="btn btn-outline-secondary" type="button" id="clear-api-key" title="Clear saved API key">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="form-text">Your API key will be saved locally in your browser for convenience and won't be stored on the server.</div>
+                                                        </div>
+                                                        <div id="transcription-options" class="mb-3">
+                                                            <label class="form-label">Transcription Options:</label>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="diarize-option">
+                                                                <label class="form-check-label" for="diarize-option">
+                                                                    Speaker Diarization (Identify different speakers)
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="tag-events-option" checked>
+                                                                <label class="form-check-label" for="tag-events-option">
+                                                                    Tag Audio Events (Laughter, Applause, etc.)
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div id="transcription-status" class="d-none alert alert-info">
+                                                            <i class="fa fa-spinner fa-spin me-2"></i>
+                                                            <span id="transcription-status-text">Processing transcription...</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-primary" id="start-transcription-button">Transcribe</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Transcription Results Modal -->
+                                        <div class="modal fade" id="transcriptionResultsModal" tabindex="-1" aria-labelledby="transcriptionResultsModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="transcriptionResultsModalLabel">Transcription Results</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="transcription-preview" class="bg-dark text-light p-3 mb-3" style="max-height: 300px; overflow-y: auto; font-family: monospace;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary" id="download-txt-button">
+                                                            <i class="fa fa-file-text me-2"></i>Download TXT
+                                                        </button>
+                                                        <button type="button" class="btn btn-success" id="download-srt-button">
+                                                            <i class="fa fa-download me-2"></i>Download SRT
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="download-error-section" class="d-none">
+                                        <div class="alert alert-danger">
+                                            <i class="fa fa-exclamation-circle me-2"></i>
+                                            <span id="error-message">An error occurred during download.</span>
+                                        </div>
+                                        <div class="text-center">
+                                            <button id="try-again-button" class="btn btn-primary">
+                                                <i class="fa fa-redo me-2"></i>Try Again
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Instructions -->
+                        <div class="card" id="instructions-card">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="mb-0">How to use:</h5>
+                            </div>
+                            <div class="card-body">
+                                <ol class="list-group list-group-numbered mb-0">
+                                    <li class="list-group-item">Find a YouTube video you want to transcribe</li>
+                                    <li class="list-group-item">Copy the video URL from your browser</li>
+                                    <li class="list-group-item">Paste the URL in the input field above</li>
+                                    <li class="list-group-item">Click "Download Audio" and wait for processing</li>
+                                    <li class="list-group-item">Click "Transcribe" to generate subtitles from the audio</li>
+                                    <li class="list-group-item">Enter your ElevenLabs API key and get transcription in TXT or SRT format</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p class="mb-0 text-muted">
+                            <i class="fa fa-info-circle me-1"></i>
+                            This tool transcribes YouTube videos for personal use only.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
