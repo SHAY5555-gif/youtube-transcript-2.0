@@ -1,0 +1,157 @@
+Create transcript
+
+POST
+
+
+https://api.elevenlabs.io
+/v1/speech-to-text
+POST
+
+/v1/speech-to-text
+
+cURL
+
+curl -X POST https://api.elevenlabs.io/v1/speech-to-text \
+     -H "xi-api-key: <apiKey>" \
+     -H "Content-Type: multipart/form-data" \
+     -F model_id="model_id" \
+     -F file=@<file1>
+Try it
+200
+Successful
+
+{
+  "language_code": "en",
+  "language_probability": 0.98,
+  "text": "Hello world!",
+  "words": [
+    {
+      "text": "Hello",
+      "type": "word",
+      "start": 0,
+      "end": 0.5,
+      "speaker_id": "speaker_1",
+      "characters": [
+        {
+          "text": "text",
+          "start": 0,
+          "end": 0.1
+        }
+      ]
+    },
+    {
+      "text": " ",
+      "type": "spacing",
+      "start": 0.5,
+      "end": 0.5,
+      "speaker_id": "speaker_1",
+      "characters": [
+        {
+          "text": "text",
+          "start": 0,
+          "end": 0.1
+        }
+      ]
+    },
+    {
+      "text": "world!",
+      "type": "word",
+      "start": 0.5,
+      "end": 1.2,
+      "speaker_id": "speaker_1",
+      "characters": [
+        {
+          "text": "text",
+          "start": 0,
+          "end": 0.1
+        }
+      ]
+    }
+  ]
+}
+Transcribe an audio or video file.
+
+Headers
+xi-api-key
+string
+Required
+Query parameters
+enable_logging
+boolean
+Optional
+Defaults to true
+When enable_logging is set to false zero retention mode will be used for the request. This will mean history features are unavailable for this request, including request stitching. Zero retention mode may only be used by enterprise customers.
+
+Request
+This endpoint expects a multipart form containing a file.
+model_id
+string
+Required
+The ID of the model to use for transcription, currently only ‘scribe_v1’ is available.
+
+file
+file
+Required
+The file to transcribe. All major audio and video formats are supported. The file size must be less than 1GB.
+
+language_code
+string
+Optional
+An ISO-639-1 or ISO-639-3 language_code corresponding to the language of the audio file. Can sometimes improve transcription performance if known beforehand. Defaults to null, in this case the language is predicted automatically.
+
+tag_audio_events
+boolean
+Optional
+Defaults to true
+Whether to tag audio events like (laughter), (footsteps), etc. in the transcription.
+
+num_speakers
+integer
+Optional
+>=1
+<=32
+The maximum amount of speakers talking in the uploaded file. Can help with predicting who speaks when. The maximum amount of speakers that can be predicted is 32. Defaults to null, in this case the amount of speakers is set to the maximum value the model supports.
+
+timestamps_granularity
+enum
+Optional
+Defaults to word
+The granularity of the timestamps in the transcription. ‘word’ provides word-level timestamps and ‘character’ provides character-level timestamps per word.
+
+Allowed values:
+none
+word
+character
+diarize
+boolean
+Optional
+Defaults to false
+Whether to annotate which speaker is currently talking in the uploaded file.
+
+Response
+Successful Response
+
+language_code
+string
+The detected language code (e.g. ‘eng’ for English).
+
+language_probability
+double
+The confidence score of the language detection (0 to 1).
+
+text
+string
+The raw text of the transcription.
+
+words
+list of objects
+List of words with their timing information.
+
+
+Show 6 properties
+Errors
+
+422
+Speech to Text Convert Request Unprocessable Entity Error
+Was this page helpful?
+Yes

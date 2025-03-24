@@ -3,10 +3,13 @@ import re
 import uuid
 import logging
 import urllib.parse
-from flask import Flask, render_template, request, jsonify, send_file, session
+import requests
+import json
+from flask import Flask, render_template, request, jsonify, send_file, session, Response
 import yt_dlp
 import threading
 import time
+from datetime import timedelta
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -265,3 +268,175 @@ def cleanup_old_files():
 
 # Start the cleanup thread
 threading.Thread(target=cleanup_old_files, daemon=True).start()
+
+# Transcription related functions and routes
+def format_time(seconds):
+    """Format seconds to SRT timestamp format (HH:MM:SS,mmm)"""
+    td = timedelta(seconds=seconds)
+    hours, remainder = divmod(td.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    milliseconds = td.microseconds // 1000
+    return f"{hours:02}:{minutes:02}:{seconds:02},{milliseconds:03}"
+
+def create_srt_content(transcription_data):
+    """Create SRT file content from ElevenLabs transcription data"""
+    srt_content = ""
+    subtitle_index = 1
+    
+    # Extract words from the transcription
+    words = [w for w in transcription_data.get('words', []) if w.get('type') == 'word']
+    
+    # Group words into subtitles (max 10 words per subtitle)
+    for i in range(0, len(words), 10):
+        group = words[i:i+10]
+        if not group:
+            continue
+            
+        start_time = group[0].get('start', 0)
+        end_time = group[-1].get('end', start_time + 2)  # Default to 2 seconds after start if no end time
+        
+        # Create text content from the words
+        text = "".join([w.get('text', '') for w in group])
+        # Add speaker info if available
+        speaker = group[0].get('speaker_id')
+        if speaker:
+            text = f"[{speaker}] {text}"
+            
+        # Format subtitle entry
+        srt_content += f"{subtitle_index}\n"
+        srt_content += f"{format_time(start_time)} --> {format_time(end_time)}\n"
+        srt_content += f"{text.strip()}\n\n"
+        
+        subtitle_index += 1
+        
+    return srt_content
+
+@app.route('/transcribe/<download_id>', methods=['POST'])
+def transcribe(download_id):
+    """Transcribe the downloaded audio file using ElevenLabs API"""
+    if download_id not in download_results:
+        return jsonify({
+            'status': 'error',
+            'message': 'Audio file not found'
+        }), 404
+        
+    result = download_results[download_id]
+    
+    if result['status'] != 'success':
+        return jsonify({
+            'status': 'error',
+            'message': 'Audio file not available'
+        }), 400
+        
+    # Get the API key from request
+    api_key = request.form.get('api_key')
+    if not api_key:
+        return jsonify({
+            'status': 'error',
+            'message': 'ElevenLabs API key is required'
+        }), 400
+        
+    # Get transcription options
+    diarize = request.form.get('diarize', 'false').lower() == 'true'
+    tag_events = request.form.get('tag_events', 'false').lower() == 'true'
+    
+    # Get file path
+    file_path = result['file']
+    
+    try:
+        # Prepare the API request to ElevenLabs
+        url = "https://api.elevenlabs.io/v1/speech-to-text"
+        
+        headers = {
+            "xi-api-key": api_key
+        }
+        
+        files = {
+            'file': open(file_path, 'rb')
+        }
+        
+        data = {
+            'model_id': 'scribe_v1',
+            'diarize': diarize,
+            'tag_audio_events': tag_events,
+            'timestamps_granularity': 'word'
+        }
+        
+        # Make the API request
+        response = requests.post(url, headers=headers, files=files, data=data)
+        
+        # Check if the request was successful
+        if response.status_code == 200:
+            transcription_data = response.json()
+            
+            # Create SRT file content
+            srt_content = create_srt_content(transcription_data)
+            
+            # Save SRT file
+            title = result.get('title', 'transcription')
+            srt_file_path = f"{TEMP_DIR}/{download_id}/{clean_filename(title)}.srt"
+            
+            with open(srt_file_path, 'w', encoding='utf-8') as srt_file:
+                srt_file.write(srt_content)
+            
+            # Update download results to include transcription file
+            download_results[download_id]['srt_file'] = srt_file_path
+            download_results[download_id]['transcription_data'] = transcription_data
+            
+            # Return success response with transcription data
+            return jsonify({
+                'status': 'success',
+                'text': transcription_data.get('text', ''),
+                'srt_preview': srt_content,
+                'language': transcription_data.get('language_code', 'en')
+            })
+        else:
+            # Handle API error
+            error_message = "Error from ElevenLabs API"
+            try:
+                error_data = response.json()
+                error_message = error_data.get('detail', {}).get('message', error_message)
+            except:
+                pass
+                
+            return jsonify({
+                'status': 'error',
+                'message': error_message,
+                'code': response.status_code
+            }), 400
+            
+    except Exception as e:
+        logger.error(f"Error during transcription: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@app.route('/get_srt/<download_id>')
+def get_srt(download_id):
+    """Send the transcription SRT file to the user"""
+    if download_id not in download_results:
+        return jsonify({
+            'status': 'error',
+            'message': 'Transcription not found'
+        }), 404
+    
+    result = download_results[download_id]
+    
+    if 'srt_file' not in result:
+        return jsonify({
+            'status': 'error',
+            'message': 'SRT file not available'
+        }), 400
+    
+    # Get the file path
+    file_path = result['srt_file']
+    title = result.get('title', 'transcription')
+    
+    # Send the file
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name=f"{clean_filename(title)}.srt",
+        mimetype="text/srt"
+    )

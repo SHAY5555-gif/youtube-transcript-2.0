@@ -14,6 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const tryAgainButton = document.getElementById('try-again-button');
     const instructionsCard = document.getElementById('instructions-card');
     const downloadTitle = document.getElementById('download-title');
+    
+    // Transcription elements
+    const transcribeButton = document.getElementById('transcribe-button');
+    const transcribeModal = new bootstrap.Modal(document.getElementById('transcribeModal'));
+    const transcriptionResultsModal = new bootstrap.Modal(document.getElementById('transcriptionResultsModal'));
+    const elevenlabsApiKey = document.getElementById('elevenlabs-api-key');
+    const diarizeOption = document.getElementById('diarize-option');
+    const tagEventsOption = document.getElementById('tag-events-option');
+    const startTranscriptionButton = document.getElementById('start-transcription-button');
+    const transcriptionStatus = document.getElementById('transcription-status');
+    const transcriptionStatusText = document.getElementById('transcription-status-text');
+    const transcriptionPreview = document.getElementById('transcription-preview');
+    const downloadSrtButton = document.getElementById('download-srt-button');
 
     // Current download ID
     let currentDownloadId = null;
@@ -206,6 +219,67 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error during cleanup:', error);
+        });
+    }
+    
+    // Transcription functionality
+    if (transcribeButton) {
+        transcribeButton.addEventListener('click', function() {
+            transcribeModal.show();
+        });
+    }
+    
+    if (startTranscriptionButton) {
+        startTranscriptionButton.addEventListener('click', function() {
+            const apiKey = elevenlabsApiKey.value.trim();
+            
+            if (!apiKey) {
+                alert('Please enter your ElevenLabs API key');
+                return;
+            }
+            
+            // Show status
+            transcriptionStatus.classList.remove('d-none');
+            startTranscriptionButton.disabled = true;
+            
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('api_key', apiKey);
+            formData.append('diarize', diarizeOption.checked);
+            formData.append('tag_events', tagEventsOption.checked);
+            
+            // Make API request
+            fetch(`/transcribe/${currentDownloadId}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide the transcription modal
+                transcribeModal.hide();
+                startTranscriptionButton.disabled = false;
+                transcriptionStatus.classList.add('d-none');
+                
+                if (data.status === 'success') {
+                    // Show results modal
+                    transcriptionPreview.textContent = data.srt_preview || data.text || 'Transcription completed successfully';
+                    transcriptionResultsModal.show();
+                    
+                    // Set up download button
+                    downloadSrtButton.onclick = function() {
+                        window.location.href = `/get_srt/${currentDownloadId}`;
+                    };
+                } else {
+                    alert(`Transcription failed: ${data.message || 'Unknown error'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error during transcription:', error);
+                transcribeModal.hide();
+                startTranscriptionButton.disabled = false;
+                transcriptionStatus.classList.add('d-none');
+                alert('Error communicating with the server. Please try again.');
+            });
         });
     }
 });

@@ -64,10 +64,79 @@
                                     
                                     <div id="download-complete-section" class="text-center d-none">
                                         <h4 id="download-title" class="mb-3">Download Ready</h4>
-                                        <button id="download-file-button" class="btn btn-success btn-lg">
-                                            <i class="fa fa-download me-2"></i>Download MP3
-                                        </button>
+                                        <div class="btn-group mb-3">
+                                            <button id="download-file-button" class="btn btn-success btn-lg">
+                                                <i class="fa fa-download me-2"></i>Download MP3
+                                            </button>
+                                            <button id="transcribe-button" class="btn btn-info btn-lg">
+                                                <i class="fa fa-file-text me-2"></i>Transcribe
+                                            </button>
+                                        </div>
                                         <p class="mt-2 text-muted">Click the button above to download your audio file</p>
+                                        
+                                        <!-- Transcription Modal -->
+                                        <div class="modal fade" id="transcribeModal" tabindex="-1" aria-labelledby="transcribeModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="transcribeModalLabel">Transcribe Audio</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="elevenlabs-api-key" class="form-label">ElevenLabs API Key:</label>
+                                                            <input type="password" class="form-control" id="elevenlabs-api-key" placeholder="Enter your ElevenLabs API Key">
+                                                            <div class="form-text">Your API key will be used only for this transaction and won't be stored on the server.</div>
+                                                        </div>
+                                                        <div id="transcription-options" class="mb-3">
+                                                            <label class="form-label">Transcription Options:</label>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="diarize-option" checked>
+                                                                <label class="form-check-label" for="diarize-option">
+                                                                    Speaker Diarization (Identify different speakers)
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" id="tag-events-option" checked>
+                                                                <label class="form-check-label" for="tag-events-option">
+                                                                    Tag Audio Events (Laughter, Applause, etc.)
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div id="transcription-status" class="d-none alert alert-info">
+                                                            <i class="fa fa-spinner fa-spin me-2"></i>
+                                                            <span id="transcription-status-text">Processing transcription...</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-primary" id="start-transcription-button">Transcribe</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Transcription Results Modal -->
+                                        <div class="modal fade" id="transcriptionResultsModal" tabindex="-1" aria-labelledby="transcriptionResultsModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="transcriptionResultsModalLabel">Transcription Results</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="transcription-preview" class="bg-dark text-light p-3 mb-3" style="max-height: 300px; overflow-y: auto; font-family: monospace;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-success" id="download-srt-button">
+                                                            <i class="fa fa-download me-2"></i>Download SRT
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div id="download-error-section" class="d-none">
