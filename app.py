@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
+# Make sure we have a secret key, use default if SESSION_SECRET env var is not available
 app.secret_key = os.environ.get("SESSION_SECRET", "youtube-audio-downloader-secret")
 
 # Create a directory for temporary files
