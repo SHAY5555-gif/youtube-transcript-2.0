@@ -310,10 +310,10 @@ def create_srt_content(transcription_data):
             
         text = "".join(text_parts)
         
-        # Add speaker info if available
-        speaker = group[0].get('speaker_id')
-        if speaker:
-            text = f"[{speaker}] {text}"
+        # We'll skip adding speaker info as per user's request
+        # speaker = group[0].get('speaker_id')
+        # if speaker:
+        #     text = f"[{speaker}] {text}"
             
         # Format subtitle entry
         srt_content += f"{subtitle_index}\n"

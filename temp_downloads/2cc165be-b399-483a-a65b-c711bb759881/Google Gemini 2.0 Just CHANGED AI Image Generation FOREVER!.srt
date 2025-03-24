@@ -1,0 +1,368 @@
+1
+00:00:00,280 --> 00:00:02,159
+[speaker_0] So I want you to imagine for a moment that
+
+2
+00:00:02,220 --> 00:00:05,319
+[speaker_0] you are a catalog manager, for example, for an e-commerce
+
+3
+00:00:05,380 --> 00:00:08,539
+[speaker_0] company, and maybe you have a singular image of a
+
+4
+00:00:08,679 --> 00:00:11,719
+[speaker_0] model wearing a piece of clothing. But you don't have
+
+5
+00:00:11,779 --> 00:00:14,539
+[speaker_0] other angles of that image and you wanna use AI
+
+6
+00:00:14,639 --> 00:00:18,079
+[speaker_0] to generate those images. Well, check this out. As you
+
+7
+00:00:18,119 --> 00:00:20,279
+[speaker_0] can see, I wanna create a side view of this
+
+8
+00:00:20,359 --> 00:00:23,959
+[speaker_0] original photo that I have. Boom, I have a side
+
+9
+00:00:24,019 --> 00:00:27,539
+[speaker_0] view shot of that piece of clothing. Next, how about
+
+10
+00:00:27,699 --> 00:00:31,979
+[speaker_0] create a rear view of this photo? Boom, rear view
+
+11
+00:00:32,000 --> 00:00:37,000
+[speaker_0] of photo. Piece of cake. Check it out. This is
+
+12
+00:00:37,759 --> 00:00:42,680
+[speaker_1] Rossy Bytes. So what I wanna talk about today is
+
+13
+00:00:42,700 --> 00:00:47,559
+[speaker_0] in the Google AI Studio, the Gemini 2 Flash experimental
+
+14
+00:00:47,639 --> 00:00:50,379
+[speaker_0] model. So when you come into the AI Studio, and
+
+15
+00:00:50,419 --> 00:00:53,119
+[speaker_0] I'll include the link in the description below, you're gonna
+
+16
+00:00:53,159 --> 00:00:58,159
+[speaker_0] wanna come underneath Preview and select Gemini 2.0 Flash experimental.
+
+17
+00:00:58,180 --> 00:01:01,219
+[speaker_0] And then for output format, you wanna select images and
+
+18
+00:01:01,319 --> 00:01:03,619
+[speaker_0] text. So let's try out a few different examples of
+
+19
+00:01:03,619 --> 00:01:05,719
+[speaker_0] things that we can do with this. So to start,
+
+20
+00:01:05,779 --> 00:01:08,159
+[speaker_0] I'm gonna bring over an image that I already have
+
+21
+00:01:08,199 --> 00:01:10,799
+[speaker_0] of a model wearing a dress, and I'm gonna say
+
+22
+00:01:11,459 --> 00:01:15,419
+[speaker_0] create a side view of this photo. We'll just click
+
+23
+00:01:15,499 --> 00:01:19,039
+[speaker_0] Run. You can see how long it's taking for the
+
+24
+00:01:19,199 --> 00:01:23,239
+[speaker_0] Gemini to actually process this. So 4.8 seconds and it
+
+25
+00:01:23,279 --> 00:01:28,959
+[speaker_0] generated a pretty perfect side view of that particular clothing.
+
+26
+00:01:31,319 --> 00:01:35,339
+[speaker_0] So now let's do create a rear view of the
+
+27
+00:01:35,439 --> 00:01:46,139
+[speaker_0] same image. Go ahead and click Run. Again, five seconds
+
+28
+00:01:46,179 --> 00:01:49,219
+[speaker_0] or so, and we have a perfect rear image. If
+
+29
+00:01:49,259 --> 00:01:52,139
+[speaker_0] we open it up, it looks like the same model,
+
+30
+00:01:52,179 --> 00:01:55,319
+[speaker_0] same clothing. Okay, so next I'm gonna drag over a
+
+31
+00:01:55,479 --> 00:01:57,859
+[speaker_0] male model wearing a suit and I'm going to do
+
+32
+00:01:57,899 --> 00:02:00,559
+[speaker_0] the same test. I'm going to say create a side
+
+33
+00:02:00,619 --> 00:02:09,539
+[speaker_0] view of this photo, and we'll click Run. This one's
+
+34
+00:02:09,559 --> 00:02:11,799
+[speaker_0] taking a little longer, but boom, look at that. We
+
+35
+00:02:11,879 --> 00:02:14,439
+[speaker_0] have a side view shot of that guy wearing the
+
+36
+00:02:14,539 --> 00:02:19,239
+[speaker_0] suit. So just like we did with the model, I'll
+
+37
+00:02:19,319 --> 00:02:23,599
+[speaker_0] also come in and say create a rear view of
+
+38
+00:02:23,759 --> 00:02:31,479
+[speaker_0] the same photo and click Run. And there we have
+
+39
+00:02:31,579 --> 00:02:36,679
+[speaker_0] a rear view of the model wearing that suit. Okay,
+
+40
+00:02:36,739 --> 00:02:39,019
+[speaker_0] next I have this image of people playing in a
+
+41
+00:02:39,119 --> 00:02:42,059
+[speaker_0] yard on a patio at a house, and what I
+
+42
+00:02:42,119 --> 00:02:44,799
+[speaker_0] wanna do is I want to use this image and
+
+43
+00:02:44,999 --> 00:02:47,939
+[speaker_0] I want to try to remove the people out of
+
+44
+00:02:47,979 --> 00:02:51,819
+[speaker_0] the background. So I'm gonna say remove the people from
+
+45
+00:02:51,919 --> 00:02:59,819
+[speaker_0] this photo, and click Run. And within about nine seconds,
+
+46
+00:03:00,399 --> 00:03:02,079
+[speaker_0] take a look at that. All the people are gone
+
+47
+00:03:02,139 --> 00:03:06,619
+[speaker_0] from the photo. Generate a recipe with steps and images
+
+48
+00:03:06,679 --> 00:03:08,719
+[speaker_0] with each step of the way on how to make
+
+49
+00:03:08,799 --> 00:03:16,199
+[speaker_0] French toast. As we can see, we have ingredients and
+
+50
+00:03:16,319 --> 00:03:21,979
+[speaker_0] equipment. Crack the large eggs, add the milk, whisk the
+
+51
+00:03:22,019 --> 00:03:31,739
+[speaker_0] ingredients thoroughly, soak the bread. It's showing you the skillet
+
+52
+00:03:31,759 --> 00:03:36,739
+[speaker_0] with butter, cooking the French toast. That is insane. Then
+
+53
+00:03:36,859 --> 00:03:40,439
+[speaker_0] flipping it over. Repeat and add more butter. There you
+
+54
+00:03:40,519 --> 00:03:42,959
+[speaker_0] have your finished French toast, and then you can add
+
+55
+00:03:43,039 --> 00:03:49,859
+[speaker_0] some toppings. For this one I wanna say generate an
+
+56
+00:03:49,999 --> 00:03:59,419
+[speaker_0] intricate mandala coloring page in black and white. So kind
+
+57
+00:03:59,459 --> 00:04:04,399
+[speaker_0] of like just a coloring page in a coloring book.
+
+58
+00:04:06,639 --> 00:04:08,759
+[speaker_0] So that took about 15 seconds, but as you can
+
+59
+00:04:08,879 --> 00:04:13,999
+[speaker_0] see, we have a very intricate mandala drawing picture. So
+
+60
+00:04:14,059 --> 00:04:18,239
+[speaker_0] now I'm going to say now color this image in
+
+61
+00:04:18,799 --> 00:04:27,639
+[speaker_0] with vibrant and beautiful colors. Click Run. So that took
+
+62
+00:04:27,699 --> 00:04:30,499
+[speaker_0] about 20 seconds, but as we can see, we have
+
+63
+00:04:30,559 --> 00:04:35,459
+[speaker_0] a colored-in version of our mandala coloring page. So next
+
+64
+00:04:35,539 --> 00:04:37,999
+[speaker_0] I wanna see how Gemini does creating an image. So
+
+65
+00:04:38,039 --> 00:04:41,819
+[speaker_0] I'm basically asking with a very detailed prompt to create
+
+66
+00:04:41,859 --> 00:04:45,099
+[speaker_0] a black and white photograph of an elderly couple walking
+
+67
+00:04:45,159 --> 00:04:47,759
+[speaker_0] hand in hand in a park, and as you can
+
+68
+00:04:47,919 --> 00:04:54,779
+[speaker_0] see, it created a fantastic-looking image. So now I wanna
+
+69
+00:04:54,819 --> 00:04:56,939
+[speaker_0] have it color this picture in, so I'm gonna say
+
+70
+00:04:57,059 --> 00:05:02,559
+[speaker_0] colorize this image now. And within 5.2 seconds, look at
+
+71
+00:05:02,599 --> 00:05:06,879
+[speaker_0] that. We have a full-color version of the same photo.
+
+72
+00:05:10,599 --> 00:05:12,939
+[speaker_0] Next I'm gonna say add a small dog somewhere on
+
+73
+00:05:12,979 --> 00:05:18,019
+[speaker_0] the sidewalk. And look at that. Not only is it
+
+74
+00:05:18,039 --> 00:05:22,919
+[speaker_0] on the sidewalk, but the couple's actually walking it. Okay,
+
+75
+00:05:22,999 --> 00:05:25,019
+[speaker_0] so next I have an image of a sofa and
+
+76
+00:05:25,079 --> 00:05:27,239
+[speaker_0] I wanna try to change the color of the sofa
+
+77
+00:05:27,359 --> 00:05:29,659
+[speaker_0] so we could maybe have multiple variations of it. So
+
+78
+00:05:29,679 --> 00:05:33,739
+[speaker_0] I'm gonna say make this sofa blue colored, and then
+
+79
+00:05:33,759 --> 00:05:38,439
+[speaker_0] I'm gonna click Run. In about five seconds, look at
+
+80
+00:05:38,459 --> 00:05:44,939
+[speaker_0] that. We have a blue version of our sofa. So
+
+81
+00:05:44,999 --> 00:05:54,459
+[speaker_0] next I'm gonna say now make it burnt orange. And
+
+82
+00:05:54,499 --> 00:05:59,199
+[speaker_0] there's a burnt orange version of our sofa. I'm going
+
+83
+00:05:59,239 --> 00:06:04,599
+[speaker_0] to now say add a stylistic clock on the wall
+
+84
+00:06:04,739 --> 00:06:12,099
+[speaker_0] in the background. That's crazy. So now we have our
+
+85
+00:06:12,219 --> 00:06:15,279
+[speaker_0] stylistic clock on the wall in the background. So as
+
+86
+00:06:15,319 --> 00:06:18,879
+[speaker_0] you can see, this technology is absolutely amazing, and the
+
+87
+00:06:18,919 --> 00:06:21,879
+[speaker_0] really crazy thing about it is what I've shown you
+
+88
+00:06:21,899 --> 00:06:24,379
+[speaker_0] here is the worst it'll ever be. It's only going
+
+89
+00:06:24,399 --> 00:06:26,779
+[speaker_0] to get exponentially better. Let me know what you think
+
+90
+00:06:26,799 --> 00:06:28,539
+[speaker_0] of this in the comments, and if you'd like me
+
+91
+00:06:28,579 --> 00:06:31,659
+[speaker_0] to continue producing content like this, please click Like and
+
+92
+00:06:31,739 --> 00:06:34,059
+[speaker_0] Subscribe. Thank you and have a great day.
+
