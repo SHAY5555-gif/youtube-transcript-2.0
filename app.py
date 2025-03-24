@@ -178,6 +178,9 @@ def download_audio(youtube_url, download_id):
             'status': 'error',
             'error': str(e)
         }
+        
+        # Save updated download results to disk even in case of error
+        save_download_results()
 
 @app.route('/')
 def index():
@@ -291,6 +294,9 @@ def cleanup():
                 del download_results[download_id]
             if download_id in download_titles:
                 del download_titles[download_id]
+            
+            # Save the updates to disk
+            save_download_results()
                 
             return jsonify({'status': 'success'})
         except Exception as e:
@@ -513,6 +519,9 @@ def transcribe(download_id):
             download_results[download_id]['srt_file'] = srt_file_path
             download_results[download_id]['txt_file'] = txt_file_path
             download_results[download_id]['transcription_data'] = transcription_data
+            
+            # Save updated results to disk
+            save_download_results()
             
             # Return success response with transcription data
             return jsonify({
