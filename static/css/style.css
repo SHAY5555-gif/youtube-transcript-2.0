@@ -67,6 +67,11 @@ body {
         border-right: 1px solid var(--bs-border-color) !important; /* Ensure proper border */
     }
     
+    /* Fix for the right-top corner */
+    .input-group > .input-group-text:first-child {
+        border-top-right-radius: 0.375rem !important;
+    }
+    
     /* Fix for the download button on mobile */
     #download-button {
         width: 100%;
