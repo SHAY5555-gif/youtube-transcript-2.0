@@ -30,6 +30,38 @@ download_progress = {}
 download_results = {}
 download_titles = {}
 
+# Path to save persistent download results
+DOWNLOAD_RESULTS_PATH = os.path.join(TEMP_DIR, 'download_results.json')
+
+# Load stored download results from disk if it exists
+def load_download_results():
+    global download_results
+    try:
+        if os.path.exists(DOWNLOAD_RESULTS_PATH):
+            with open(DOWNLOAD_RESULTS_PATH, 'r', encoding='utf-8') as f:
+                loaded_results = json.load(f)
+                # Only restore entries where the file actually exists
+                for download_id, result in loaded_results.items():
+                    if 'file' in result and os.path.exists(result['file']):
+                        download_results[download_id] = result
+                        logger.debug(f"Restored download result: {download_id}")
+                    else:
+                        logger.debug(f"Skipped restoring missing file for: {download_id}")
+    except Exception as e:
+        logger.error(f"Error loading stored download results: {str(e)}")
+
+# Save download results to disk
+def save_download_results():
+    try:
+        with open(DOWNLOAD_RESULTS_PATH, 'w', encoding='utf-8') as f:
+            json.dump(download_results, f, ensure_ascii=False, indent=4)
+        logger.debug(f"Saved download results to disk: {len(download_results)} entries")
+    except Exception as e:
+        logger.error(f"Error saving download results: {str(e)}")
+
+# Load stored results on startup
+load_download_results()
+
 def is_valid_youtube_url(url):
     """Check if the URL is a valid YouTube URL"""
     if not url:
@@ -137,6 +169,9 @@ def download_audio(youtube_url, download_id):
                 'title': title
             }
             
+            # Save updated download results to disk
+            save_download_results()
+            
     except Exception as e:
         logger.error(f"Error downloading audio: {str(e)}")
         download_results[download_id] = {
@@ -223,6 +258,13 @@ def get_file(download_id):
     file_path = result['file']
     title = result.get('title', 'download')
     
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return jsonify({
+            'status': 'error',
+            'message': 'Audio file not found on the server. It may have been deleted.'
+        }), 404
+    
     # Send the file
     return send_file(
         file_path,
@@ -262,7 +304,7 @@ def cleanup():
 
 # Cleanup thread to remove old files periodically
 def cleanup_old_files():
-    """Remove files older than 1 hour"""
+    """Remove files older than 24 hours and not in use"""
     while True:
         time.sleep(3600)  # Run every hour
         try:
@@ -270,9 +312,16 @@ def cleanup_old_files():
             for download_folder in os.listdir(TEMP_DIR):
                 folder_path = os.path.join(TEMP_DIR, download_folder)
                 if os.path.isdir(folder_path):
+                    download_id = os.path.basename(folder_path)
+                    
+                    # Skip folders that are still tracked in download_results
+                    if download_id in download_results:
+                        logger.debug(f"Skipping cleanup of folder in use: {folder_path}")
+                        continue
+                    
                     # Check folder creation time
                     creation_time = os.path.getctime(folder_path)
-                    if current_time - creation_time > 3600:  # Older than 1 hour
+                    if current_time - creation_time > 86400:  # Older than 24 hours (24*3600)
                         import shutil
                         shutil.rmtree(folder_path, ignore_errors=True)
                         logger.debug(f"Cleaned up old folder: {folder_path}")
@@ -399,6 +448,13 @@ def transcribe(download_id):
     # Get file path
     file_path = result['file']
     
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return jsonify({
+            'status': 'error',
+            'message': f'Audio file not found at: {file_path}. The file may have been deleted or moved.'
+        }), 404
+    
     try:
         # Prepare the API request to ElevenLabs
         url = "https://api.elevenlabs.io/v1/speech-to-text"
@@ -512,6 +568,13 @@ def get_srt(download_id):
     file_path = result['srt_file']
     title = result.get('title', 'transcription')
     
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return jsonify({
+            'status': 'error',
+            'message': 'SRT file not found on the server. It may have been deleted.'
+        }), 404
+    
     # Send the file
     return send_file(
         file_path,
@@ -540,6 +603,13 @@ def get_txt(download_id):
     # Get the file path
     file_path = result['txt_file']
     title = result.get('title', 'transcription')
+    
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return jsonify({
+            'status': 'error',
+            'message': 'TXT file not found on the server. It may have been deleted.'
+        }), 404
     
     # Send the file
     return send_file(
