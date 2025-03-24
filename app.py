@@ -40,11 +40,27 @@ def load_download_results():
         if os.path.exists(DOWNLOAD_RESULTS_PATH):
             with open(DOWNLOAD_RESULTS_PATH, 'r', encoding='utf-8') as f:
                 loaded_results = json.load(f)
-                # Only restore entries where the file actually exists
+                # Process each download entry
                 for download_id, result in loaded_results.items():
-                    if 'file' in result and os.path.exists(result['file']):
+                    download_dir = f"{TEMP_DIR}/{download_id}"
+                    
+                    # Skip if download directory doesn't exist
+                    if not os.path.exists(download_dir):
+                        logger.debug(f"Skipped restoring missing directory for: {download_id}")
+                        continue
+                    
+                    # Look for MP3 files
+                    mp3_files = [f for f in os.listdir(download_dir) if f.endswith('.mp3')]
+                    if mp3_files:
+                        # Use the actual file we found (first one if multiple)
+                        mp3_file = os.path.join(download_dir, mp3_files[0])
+                        result['file'] = mp3_file
                         download_results[download_id] = result
-                        logger.debug(f"Restored download result: {download_id}")
+                        logger.debug(f"Restored download result with corrected file path: {download_id} -> {mp3_file}")
+                    elif 'file' in result and os.path.exists(result['file']):
+                        # Fall back to the stored file path if it exists
+                        download_results[download_id] = result
+                        logger.debug(f"Restored download result with original file path: {download_id}")
                     else:
                         logger.debug(f"Skipped restoring missing file for: {download_id}")
     except Exception as e:
@@ -160,7 +176,19 @@ def download_audio(youtube_url, download_id):
                 info = info['entries'][0]  # Get the first video
             
             title = download_titles.get(download_id, "download")
-            mp3_file = f"{TEMP_DIR}/{download_id}/{clean_filename(title)}.mp3"
+            
+            # Look for the actual file in the download directory
+            download_dir = f"{TEMP_DIR}/{download_id}"
+            mp3_files = [f for f in os.listdir(download_dir) if f.endswith('.mp3')]
+            
+            if mp3_files:
+                # Use the actual filename found
+                mp3_file = os.path.join(download_dir, mp3_files[0])
+                logger.debug(f"Found MP3 file: {mp3_file}")
+            else:
+                # Fallback if no file found (shouldn't happen)
+                mp3_file = f"{download_dir}/{clean_filename(title)}.mp3"
+                logger.warning(f"No MP3 file found in {download_dir}, using fallback: {mp3_file}")
             
             # Set the result
             download_results[download_id] = {
