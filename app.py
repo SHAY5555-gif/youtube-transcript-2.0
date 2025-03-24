@@ -295,8 +295,21 @@ def create_srt_content(transcription_data):
         start_time = group[0].get('start', 0)
         end_time = group[-1].get('end', start_time + 2)  # Default to 2 seconds after start if no end time
         
-        # Create text content from the words
-        text = "".join([w.get('text', '') for w in group])
+        # Create text content from the words with spaces between them
+        # Using a space between each word
+        text_parts = []
+        for j, word in enumerate(group):
+            word_text = word.get('text', '')
+            
+            # Check if this is a spacing type or if we need to add a space
+            if j > 0 and not word_text.startswith((' ', '.', ',', '!', '?', ':', ';')):
+                # Add space before this word if it doesn't start with punctuation
+                text_parts.append(' ')
+            
+            text_parts.append(word_text)
+            
+        text = "".join(text_parts)
+        
         # Add speaker info if available
         speaker = group[0].get('speaker_id')
         if speaker:
@@ -349,10 +362,10 @@ def transcribe(download_id):
         
         headers = {
             "xi-api-key": api_key,
-            # Не устанавливаем Content-Type, requests поставит его автоматически с boundary
+            # We don't set Content-Type, requests will set it automatically with boundary
         }
         
-        # Открываем файл в двоичном режиме
+        # Open file in binary mode
         with open(file_path, 'rb') as audio_file:
             files = {
                 'file': ('audio.mp3', audio_file, 'audio/mpeg')
@@ -360,7 +373,7 @@ def transcribe(download_id):
             
             data = {
                 'model_id': 'scribe_v1',
-                'diarize': str(diarize).lower(),  # Конвертируем в 'true' или 'false'
+                'diarize': str(diarize).lower(),  # Convert to 'true' or 'false'
                 'tag_audio_events': str(tag_events).lower(),
                 'timestamps_granularity': 'word'
             }
@@ -373,6 +386,7 @@ def transcribe(download_id):
         # Check if the request was successful
         if response.status_code == 200:
             transcription_data = response.json()
+            logger.debug(f"Received transcription data: {transcription_data}")
             
             # Create SRT file content
             srt_content = create_srt_content(transcription_data)
@@ -383,6 +397,8 @@ def transcribe(download_id):
             
             with open(srt_file_path, 'w', encoding='utf-8') as srt_file:
                 srt_file.write(srt_content)
+            
+            logger.debug(f"Created SRT file at: {srt_file_path}")
             
             # Update download results to include transcription file
             download_results[download_id]['srt_file'] = srt_file_path
@@ -398,11 +414,14 @@ def transcribe(download_id):
         else:
             # Handle API error
             error_message = "Error from ElevenLabs API"
+            response_text = response.text
+            logger.error(f"ElevenLabs API error. Status code: {response.status_code}, Response: {response_text}")
+            
             try:
                 error_data = response.json()
                 error_message = error_data.get('detail', {}).get('message', error_message)
-            except:
-                pass
+            except Exception as e:
+                logger.error(f"Failed to parse error response: {str(e)}")
                 
             return jsonify({
                 'status': 'error',
