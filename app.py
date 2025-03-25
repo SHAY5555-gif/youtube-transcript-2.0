@@ -6,7 +6,7 @@ import urllib.parse
 import requests
 import json
 import unicodedata
-from flask import Flask, render_template, request, jsonify, send_file, session, Response
+from flask import Flask, render_template, request, jsonify, send_file, session, Response, make_response
 import yt_dlp
 import threading
 import time
@@ -20,6 +20,19 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 # Make sure we have a secret key, use default if SESSION_SECRET env var is not available
 app.secret_key = os.environ.get("SESSION_SECRET", "youtube-audio-downloader-secret")
+
+# Add global middleware to allow framing (embedding in iframes)
+@app.after_request
+def allow_iframe_embedding(response):
+    """Add headers to allow embedding in iframes and disable X-Frame-Options restrictions"""
+    # Allow the site to be embedded in iframes on any domain
+    response.headers['X-Frame-Options'] = 'ALLOWALL'
+    response.headers['Content-Security-Policy'] = "frame-ancestors *"
+    # Add cache control headers to prevent certain browser caching issues
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
 
 # Create a directory for temporary files
 TEMP_DIR = "temp_downloads"
@@ -490,6 +503,22 @@ def transcribe(download_id):
         }), 404
     
     try:
+        # Double-check if the file exists before proceeding
+        if not os.path.exists(file_path):
+            logger.error(f"Audio file not found at path: {file_path}")
+            return jsonify({
+                'status': 'error',
+                'message': 'Audio file not found on the server. Please download the file again.'
+            }), 404
+        
+        # Check if file is readable and has content
+        if os.path.getsize(file_path) == 0:
+            logger.error(f"Audio file exists but is empty: {file_path}")
+            return jsonify({
+                'status': 'error',
+                'message': 'Audio file is empty. Please download the file again.'
+            }), 400
+                
         # Prepare the API request to ElevenLabs
         url = "https://api.elevenlabs.io/v1/speech-to-text"
         
